@@ -36,4 +36,4 @@ pub mod compress;
 pub mod diskformat;
 pub mod linux;
 
-pub use linux::*;
+pub use crate::linux::*;

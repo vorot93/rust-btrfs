@@ -1,4 +1,4 @@
-use linux::imports::*;
+use crate::linux::imports::*;
 
 // --------- high level wrapper
 
@@ -12,8 +12,8 @@ pub struct FileExtent {
 pub fn get_file_extent_map_for_path<PathRef: AsRef<Path>>(
     file_path: PathRef,
 ) -> Result<Vec<FileExtent>, String> {
-    let file_descriptor = try!(FileDescriptor::open(file_path, libc::O_RDONLY,)
-        .map_err(|error| format!("Error opening file: {}", error)));
+    let file_descriptor = FileDescriptor::open(file_path, libc::O_RDONLY)
+        .map_err(|error| format!("Error opening file: {}", error))?;
 
     get_file_extent_map(file_descriptor.get_value())
 }
@@ -25,7 +25,7 @@ pub fn get_file_extent_map(file_descriptor: libc::c_int) -> Result<Vec<FileExten
     let mut c_file_extent_map;
 
     loop {
-        c_file_extent_map = try!(get_c_file_extent_map(file_descriptor, extent_count));
+        c_file_extent_map = get_c_file_extent_map(file_descriptor, extent_count)?;
 
         if extent_count != 0 {
             let last_mapped_extent =

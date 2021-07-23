@@ -3,7 +3,7 @@ use std::fmt::Error as FmtError;
 use std::fmt::Formatter;
 use std::mem;
 
-use diskformat::*;
+use crate::diskformat::*;
 
 #[derive(Clone, Copy, Eq, Hash, PartialEq)]
 pub struct BtrfsLeafNode<'a> {

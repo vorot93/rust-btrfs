@@ -102,11 +102,9 @@ pub fn btrfs_decompress(
     match compression_type {
         BTRFS_EXTENT_DATA_NO_COMPRESSION => Ok(Cow::Borrowed(raw_data)),
 
-        BTRFS_EXTENT_DATA_LZO_COMPRESSION => {
-            try!(minilzo::decompress(raw_data, logical_size as usize,)
-                .map(|uncompressed_data| Ok(Cow::Owned(uncompressed_data,)))
-                .or_else(|error| Err(format!("LZO decompression failed: {:?}", error))))
-        }
+        BTRFS_EXTENT_DATA_LZO_COMPRESSION => minilzo::decompress(raw_data, logical_size as usize)
+            .map(|uncompressed_data| Ok(Cow::Owned(uncompressed_data)))
+            .or_else(|error| Err(format!("LZO decompression failed: {:?}", error)))?,
 
         BTRFS_EXTENT_DATA_ZLIB_COMPRESSION => {
             let mut uncompressed_data = Vec::with_capacity(logical_size as usize);

@@ -4,7 +4,7 @@ use std::fmt::Error as FmtError;
 use std::fmt::Formatter;
 use std::mem;
 
-use diskformat::*;
+use crate::diskformat::*;
 
 #[repr(C, packed)]
 #[derive(Copy, Clone, Eq, Hash, Ord, PartialEq, PartialOrd)]

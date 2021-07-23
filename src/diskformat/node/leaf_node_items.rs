@@ -1,6 +1,6 @@
 use std::mem;
 
-use diskformat::*;
+use crate::diskformat::*;
 
 pub struct BtrfsLeafNodeItems<'a> {
     bytes: &'a [u8],

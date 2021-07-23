@@ -1,4 +1,4 @@
-use linux::imports::*;
+use crate::linux::imports::*;
 
 #[derive(Debug, Eq, PartialEq)]
 pub enum CompressionType {
@@ -9,7 +9,7 @@ pub enum CompressionType {
 
 impl Into<u32> for CompressionType {
     fn into(self) -> u32 {
-        use CompressionType::*;
+        use crate::CompressionType::*;
 
         match self {
             None => COMPRESS_NONE,

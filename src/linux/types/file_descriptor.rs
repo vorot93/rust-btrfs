@@ -1,4 +1,4 @@
-use linux::imports::*;
+use crate::linux::imports::*;
 
 // ---------- file descriptor with destructor
 
@@ -15,14 +15,16 @@ impl FileDescriptor {
 
         // TODO should be able to do this cleanly on linux...
 
-        let path_string = try!(path.to_str().ok_or(format!(
-            "Invalid characters in path: {}",
-            path.to_string_lossy()
-        )))
-        .to_owned();
+        let path_string = path
+            .to_str()
+            .ok_or(format!(
+                "Invalid characters in path: {}",
+                path.to_string_lossy()
+            ))?
+            .to_owned();
 
-        let path_c = try!(CString::new(path_string.into_bytes(),)
-            .map_err(|_| format!("Invalid characters in path: {}", path.to_string_lossy())));
+        let path_c = CString::new(path_string.into_bytes())
+            .map_err(|_| format!("Invalid characters in path: {}", path.to_string_lossy()))?;
 
         let fd = unsafe { libc::open(path_c.as_ptr(), flags) };
 

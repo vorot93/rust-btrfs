@@ -6,7 +6,7 @@
 //! capacity, and a high level of usage may indicate that a balance operation
 //! is required.
 
-use linux::imports::*;
+use crate::linux::imports::*;
 use nix::Errno as NixErrno;
 use nix::Error as NixError;
 
@@ -74,7 +74,7 @@ pub fn get_device_infos(
     let mut device_infos: Vec<DeviceInfo> = vec![];
 
     for device_id in 0..filesystem_info.max_id + 1 {
-        let device_info_option = try!(get_device_info(file_descriptor, device_id));
+        let device_info_option = get_device_info(file_descriptor, device_id)?;
 
         if device_info_option.is_none() {
             continue;

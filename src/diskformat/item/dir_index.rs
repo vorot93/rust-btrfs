@@ -4,7 +4,7 @@ use std::fmt::Error as FmtError;
 use std::fmt::Formatter;
 use std::mem;
 
-use diskformat::*;
+use crate::diskformat::*;
 
 #[derive(Copy, Clone, Eq, Hash, PartialEq)]
 pub struct BtrfsDirIndex<'a> {

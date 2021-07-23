@@ -12,7 +12,7 @@
 //! limit, or deduplicate a set of files in batches, using the same source file
 //! each time, which should eventually have exactly the same result.
 
-use linux::imports::*;
+use crate::linux::imports::*;
 
 /// This function maps directly onto the kernel's deduplicate range
 /// functionality.
@@ -125,22 +125,23 @@ pub fn deduplicate_files_with_source<AsPath1: AsRef<Path>, AsPath2: AsRef<Path>>
 
     // open files
 
-    let source_file_metadata = try!(fs::metadata(source_filename,).map_err(|io_error| format!(
-        "Error getting metadata for {:?}: {}",
-        source_filename,
-        io_error.description()
-    )));
+    let source_file_metadata = fs::metadata(source_filename).map_err(|io_error| {
+        format!(
+            "Error getting metadata for {:?}: {}",
+            source_filename, io_error
+        )
+    })?;
 
-    let source_file_descriptor = try!(FileDescriptor::open(source_filename, libc::O_RDWR,)
-        .map_err(|error| format!("Error opening file: {:?}: {}", source_filename, error)));
+    let source_file_descriptor = FileDescriptor::open(source_filename, libc::O_RDWR)
+        .map_err(|error| format!("Error opening file: {:?}: {}", source_filename, error))?;
 
     let mut target_file_descriptors: Vec<FileDescriptor> = Vec::new();
 
     for dest_filename in dest_filenames {
         let dest_filename = dest_filename.as_ref();
 
-        let target_file_descriptor = try!(FileDescriptor::open(dest_filename, libc::O_RDWR,)
-            .map_err(|error| format!("Error opening file: {:?}: {}", dest_filename, error)));
+        let target_file_descriptor = FileDescriptor::open(dest_filename, libc::O_RDWR)
+            .map_err(|error| format!("Error opening file: {:?}: {}", dest_filename, error))?;
 
         target_file_descriptors.push(target_file_descriptor);
     }
@@ -165,10 +166,7 @@ pub fn deduplicate_files_with_source<AsPath1: AsRef<Path>, AsPath2: AsRef<Path>>
 
     // perform dedupe
 
-    try!(deduplicate_range(
-        source_file_descriptor.get_value(),
-        &mut dedupe_range
-    ));
+    deduplicate_range(source_file_descriptor.get_value(), &mut dedupe_range)?;
 
     // process result
 
