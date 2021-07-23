@@ -27,7 +27,7 @@ pub fn get_filesystem_info(file_descriptor: libc::c_int) -> Result<FilesystemInf
 
         num_devices: c_fs_info_args.num_devices,
 
-        filesystem_id: Uuid::from_bytes(&c_fs_info_args.filesystem_id).unwrap(),
+        filesystem_id: Uuid::from_bytes(c_fs_info_args.filesystem_id),
     })
 }
 
@@ -57,7 +57,7 @@ pub fn get_device_info(
     Ok(Some(DeviceInfo {
         device_id: c_dev_info_args.devid,
 
-        uuid: Uuid::from_bytes(&c_dev_info_args.uuid).unwrap(),
+        uuid: Uuid::from_bytes(c_dev_info_args.uuid),
 
         bytes_used: c_dev_info_args.bytes_used,
 
