@@ -8,5 +8,3 @@ pub const BTRFS_EXTENT_ITEM_TYPE: u8 = 0xa8;
 pub const BTRFS_CHUNK_ITEM_TYPE: u8 = 0xe4;
 pub const BTRFS_ROOT_BACKREF_ITEM_TYPE: u8 = 0x90;
 pub const BTRFS_ROOT_REF_ITEM_TYPE: u8 = 0x9c;
-
-// ex: noet ts=4 filetype=rust

@@ -78,5 +78,3 @@ macro_rules! leaf_item_composite_type_iterator {
 	}
 
 }
-
-// ex: noet ts=4 filetype=rust

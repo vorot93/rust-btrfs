@@ -20,10 +20,10 @@ mod timestamp;
 mod uuid;
 
 pub use self::checksum::*;
-pub use self::device::*;
-pub use self::device_set::*;
 pub use self::dev_item::*;
 pub use self::dev_item_data::*;
+pub use self::device::*;
+pub use self::device_set::*;
 pub use self::file_type::*;
 pub use self::key::*;
 pub use self::label::*;
@@ -39,5 +39,3 @@ pub use self::superblock_system_chunks_data::*;
 pub use self::superblock_unused::*;
 pub use self::timestamp::*;
 pub use self::uuid::*;
-
-// ex: noet ts=4 filetype=rust

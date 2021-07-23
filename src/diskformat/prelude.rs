@@ -15,15 +15,13 @@ pub use byteorder::ByteOrder;
 pub use byteorder::LittleEndian;
 
 pub mod flate2 {
-	pub use flate2::*;
+    pub use flate2::*;
 }
 
 pub mod minilzo {
-	pub use minilzo::*;
+    pub use minilzo::*;
 }
 
 pub use output::Output;
 
 pub use super::*;
-
-// ex: noet ts=4 filetype=rust

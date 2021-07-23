@@ -25,5 +25,3 @@ pub use self::filesystem_info::*;
 pub use self::group_profile::*;
 pub use self::group_type::*;
 pub use self::space_info::*;
-
-// ex: noet ts=4 filetype=rust

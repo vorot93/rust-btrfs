@@ -10,5 +10,3 @@ pub const BTRFS_CHILD_FIFO_TYPE: u8 = 5;
 pub const BTRFS_CHILD_SOCKET_TYPE: u8 = 6;
 pub const BTRFS_CHILD_SYMBOLIC_LINK_TYPE: u8 = 7;
 pub const BTRFS_CHILD_EXTENDED_ATTRIBUTE_TYPE: u8 = 8;
-
-// ex: noet ts=4 filetype=rust

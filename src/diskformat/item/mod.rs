@@ -1,6 +1,6 @@
 mod chunk_item;
-mod chunk_item_stripe_data;
 mod chunk_item_data;
+mod chunk_item_stripe_data;
 mod dir_index;
 mod dir_item;
 mod dir_item_data;
@@ -65,5 +65,3 @@ pub use self::root_ref::*;
 pub use self::root_ref_data::*;
 pub use self::tree_block_info_data::*;
 pub use self::unknown_item::*;
-
-// ex: noet ts=4 filetype=rust

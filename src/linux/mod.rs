@@ -1,10 +1,8 @@
 mod ctypes;
 mod imports;
 mod ioctl_wrapper;
-mod types;
 mod operations;
+mod types;
 
-pub use self::types::*;
 pub use self::operations::*;
-
-// ex: noet ts=4 filetype=rust
+pub use self::types::*;

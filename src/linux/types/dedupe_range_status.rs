@@ -1,7 +1,5 @@
-#[ derive (Debug, Eq, PartialEq) ]
+#[derive(Debug, Eq, PartialEq)]
 pub enum DedupeRangeStatus {
-	Same,
-	Differs,
+    Same,
+    Differs,
 }
-
-// ex: noet ts=4 filetype=rust

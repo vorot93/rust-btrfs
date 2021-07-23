@@ -15,5 +15,3 @@ pub use self::root_tree::*;
 pub use self::tree::*;
 pub use self::tree_id::*;
 pub use self::unknown_tree::*;
-
-// ex: noet ts=4 filetype=rust

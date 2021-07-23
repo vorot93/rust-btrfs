@@ -11,7 +11,9 @@ pub use std::os::unix::ffi::OsStringExt;
 pub use std::path::Path;
 pub use std::slice;
 
-pub mod libc { pub use libc::*; }
+pub mod libc {
+    pub use libc::*;
+}
 
 pub use uuid::Uuid;
 

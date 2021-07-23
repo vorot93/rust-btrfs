@@ -4,132 +4,72 @@ use std::fmt::Formatter;
 
 use super::super::*;
 
-#[ derive (Clone, Eq, Hash, PartialEq) ]
-pub enum BtrfsNode <'a> {
-	Internal (BtrfsInternalNode <'a>),
-	Leaf (BtrfsLeafNode <'a>),
+#[derive(Clone, Eq, Hash, PartialEq)]
+pub enum BtrfsNode<'a> {
+    Internal(BtrfsInternalNode<'a>),
+    Leaf(BtrfsLeafNode<'a>),
 }
 
-impl <'a> BtrfsNode <'a> {
+impl<'a> BtrfsNode<'a> {
+    pub fn from_bytes(
+        physical_address: BtrfsPhysicalAddress,
+        bytes: &'a [u8],
+    ) -> Result<BtrfsNode<'a>, String> {
+        // verify checksum
 
-	pub fn from_bytes (
-		physical_address: BtrfsPhysicalAddress,
-		bytes: & 'a [u8],
-	) -> Result <BtrfsNode <'a>, String> {
+        let calculated_checksum = BtrfsChecksum::from(btrfs_crc32c(&bytes[0x20..bytes.len()]));
 
-		// verify checksum
+        let header = unsafe { &*(bytes.as_ptr() as *const BtrfsNodeHeader) };
 
-		let calculated_checksum =
-			BtrfsChecksum::from (
-				btrfs_crc32c (
-					& bytes [0x20 .. bytes.len ()]));
+        if header.checksum() != calculated_checksum {
+            return Err("Checksum mismatch".to_owned());
+        }
 
-		let header = unsafe {
-			& * (bytes.as_ptr () as * const BtrfsNodeHeader)
-		};
+        // construct
 
-		if header.checksum () != calculated_checksum {
+        if header.level() == 0 {
+            Ok(BtrfsNode::Leaf(BtrfsLeafNode::new(physical_address, bytes)))
+        } else {
+            Ok(BtrfsNode::Internal(BtrfsInternalNode::new(
+                physical_address,
+                bytes,
+            )?))
+        }
+    }
 
-			return Err (
-				"Checksum mismatch".to_owned ());
+    pub fn physical_address(&self) -> BtrfsPhysicalAddress {
+        match self {
+            &BtrfsNode::Internal(ref node) => node.physical_address(),
 
-		}
+            &BtrfsNode::Leaf(ref node) => node.physical_address(),
+        }
+    }
 
-		// construct
+    pub fn header(&self) -> &BtrfsNodeHeader {
+        match self {
+            &BtrfsNode::Internal(ref node) => node.header(),
 
-		if header.level () == 0 {
+            &BtrfsNode::Leaf(ref node) => node.header(),
+        }
+    }
 
-			Ok (
-				BtrfsNode::Leaf (
-					BtrfsLeafNode::new (
-						physical_address,
-						bytes,
-					)
-				)
-			)
+    pub fn tree_id(&self) -> BtrfsTreeId {
+        self.header().tree_id()
+    }
 
-		} else {
-
-			Ok (
-				BtrfsNode::Internal (
-					BtrfsInternalNode::new (
-						physical_address,
-						bytes,
-					) ?
-				)
-			)
-
-		}
-
-	}
-
-	pub fn physical_address (
-		& self,
-	) -> BtrfsPhysicalAddress {
-
-		match self {
-
-			& BtrfsNode::Internal (ref node) =>
-				node.physical_address (),
-
-			& BtrfsNode::Leaf (ref node) =>
-				node.physical_address (),
-
-		}
-
-	}
-
-	pub fn header (
-		& self,
-	) -> & BtrfsNodeHeader {
-
-		match self {
-
-			& BtrfsNode::Internal (ref node) =>
-				node.header (),
-
-			& BtrfsNode::Leaf (ref node) =>
-				node.header (),
-
-		}
-
-	}
-
-	pub fn tree_id (& self) -> BtrfsTreeId {
-		self.header ().tree_id ()
-	}
-
-	pub fn generation (& self) -> u64 {
-		self.header ().generation ()
-	}
-
+    pub fn generation(&self) -> u64 {
+        self.header().generation()
+    }
 }
 
-impl <'a> Debug for BtrfsNode <'a> {
+impl<'a> Debug for BtrfsNode<'a> {
+    fn fmt(&self, formatter: &mut Formatter) -> Result<(), FmtError> {
+        match self {
+            &BtrfsNode::Internal(internal_node) => {
+                formatter.write_fmt(format_args!("{:?}", internal_node))
+            }
 
-	fn fmt (
-		& self,
-		formatter: & mut Formatter,
-	) -> Result <(), FmtError> {
-
-		match self {
-
-			& BtrfsNode::Internal (internal_node) =>
-				formatter.write_fmt (
-					format_args! (
-						"{:?}",
-						internal_node)),
-
-			& BtrfsNode::Leaf (leaf_node) =>
-				formatter.write_fmt (
-					format_args! (
-						"{:?}",
-						leaf_node)),
-
-		}
-
-	}
-
+            &BtrfsNode::Leaf(leaf_node) => formatter.write_fmt(format_args!("{:?}", leaf_node)),
+        }
+    }
 }
-
-// ex: noet ts=4 filetype=rust

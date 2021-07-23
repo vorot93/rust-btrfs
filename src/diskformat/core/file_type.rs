@@ -7,5 +7,3 @@ pub const BTRFS_FT_FIFO: u8 = 5;
 pub const BTRFS_FT_SOCK: u8 = 6;
 pub const BTRFS_FT_SYMLINK: u8 = 7;
 pub const BTRFS_FT_XATTR: u8 = 8;
-
-// ex: noet ts=4 filetype=rust

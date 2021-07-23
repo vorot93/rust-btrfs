@@ -8,146 +8,87 @@ use linux::imports::*;
 
 // ---------- get space info
 
-pub fn get_space_info (
-	file_descriptor: libc::c_int,
-) -> Result <Vec <SpaceInfo>, String> {
+pub fn get_space_info(file_descriptor: libc::c_int) -> Result<Vec<SpaceInfo>, String> {
+    // open directory
 
-	// open directory
+    let mut num_spaces = 0;
+    let mut c_space_info;
 
-	let mut num_spaces = 0;
-	let mut c_space_info;
+    loop {
+        c_space_info = try!(get_c_space_info(file_descriptor, num_spaces));
 
-	loop {
+        if c_space_info.args.total_spaces <= c_space_info.args.space_slots {
+            break;
+        }
 
-		c_space_info =
-			try! (
-				get_c_space_info (
-					file_descriptor,
-					num_spaces));
+        num_spaces = c_space_info.args.total_spaces;
+    }
 
-		if c_space_info.args.total_spaces
-			<= c_space_info.args.space_slots {
+    // create return value
 
-			break;
+    let mut space_infos: Vec<SpaceInfo> = vec![];
 
-		}
+    for c_space_info in c_space_info.infos.iter() {
+        space_infos.push(SpaceInfo {
+            group_type: GroupType::from(c_space_info.flags),
 
-		num_spaces =
-			c_space_info.args.total_spaces;
+            group_profile: GroupProfile::from(c_space_info.flags),
 
-	}
+            used_bytes: c_space_info.used_bytes,
 
-	// create return value
+            total_bytes: c_space_info.total_bytes,
+        });
+    }
 
-	let mut space_infos: Vec <SpaceInfo> =
-		vec! [];
-
-	for c_space_info in c_space_info.infos.iter () {
-
-		space_infos.push (
-			SpaceInfo {
-
-			group_type:
-				GroupType::from (
-					c_space_info.flags),
-
-			group_profile:
-				GroupProfile::from (
-					c_space_info.flags),
-
-			used_bytes:
-				c_space_info.used_bytes,
-
-			total_bytes:
-				c_space_info.total_bytes,
-
-			}
-		);
-
-	}
-
-	Ok (space_infos)
-
+    Ok(space_infos)
 }
 
 // low level wrapper
 
 struct CSpaceInfoResult {
-	args: IoctlSpaceArgs,
-	infos: Vec <IoctlSpaceInfo>,
+    args: IoctlSpaceArgs,
+    infos: Vec<IoctlSpaceInfo>,
 }
 
-fn get_c_space_info (
-	file_descriptor: libc::c_int,
-	num_spaces: u64,
-) -> Result <CSpaceInfoResult, String> {
+fn get_c_space_info(
+    file_descriptor: libc::c_int,
+    num_spaces: u64,
+) -> Result<CSpaceInfoResult, String> {
+    // allocate buffer
 
-	// allocate buffer
+    let c_space_buffer_size =
+        mem::size_of::<IoctlSpaceArgs>() + num_spaces as usize * mem::size_of::<IoctlSpaceInfo>();
 
-	let c_space_buffer_size =
-		mem::size_of::<IoctlSpaceArgs> ()
-		+ num_spaces as usize
-			* mem::size_of::<IoctlSpaceInfo> ();
+    let mut c_space_buffer: Vec<u8> = Vec::from_iter(iter::repeat(0u8).take(c_space_buffer_size));
 
-	let mut c_space_buffer: Vec <u8> =
-		Vec::from_iter (
-			iter::repeat (0u8).take (
-				c_space_buffer_size));
+    let (c_space_args_buffer, c_space_infos_buffer) =
+        c_space_buffer.split_at_mut(mem::size_of::<IoctlSpaceArgs>());
 
-	let (c_space_args_buffer, c_space_infos_buffer) =
-		c_space_buffer.split_at_mut (
-			mem::size_of::<IoctlSpaceArgs> ());
+    // split buffer
 
-	// split buffer
+    let c_space_args_slice: &mut [IoctlSpaceArgs] =
+        unsafe { slice::from_raw_parts_mut(mem::transmute(c_space_args_buffer.as_mut_ptr()), 1) };
 
-	let c_space_args_slice: & mut [IoctlSpaceArgs] =
-		unsafe {
-			slice::from_raw_parts_mut (
-				mem::transmute (
-					c_space_args_buffer.as_mut_ptr ()),
-				1)
-		};
+    let c_space_args = &mut c_space_args_slice[0];
 
-	let c_space_args =
-		& mut c_space_args_slice [0];
+    let c_space_infos: &mut [IoctlSpaceInfo] = unsafe {
+        slice::from_raw_parts_mut(
+            mem::transmute(c_space_infos_buffer.as_mut_ptr()),
+            num_spaces as usize,
+        )
+    };
 
-	let c_space_infos: & mut [IoctlSpaceInfo] =
-		unsafe {
-			slice::from_raw_parts_mut (
-				mem::transmute (
-					c_space_infos_buffer.as_mut_ptr ()),
-				num_spaces as usize)
-		};
+    // get info
 
-	// get info
+    c_space_args.space_slots = num_spaces;
 
-	c_space_args.space_slots =
-		num_spaces;
+    unsafe { ioctl_space_info(file_descriptor, c_space_args as *mut IoctlSpaceArgs) }
+        .map_err(|error| format!("Error getting btrfs space information: {}", error))?;
 
-	unsafe {
+    // return
 
-		ioctl_space_info (
-			file_descriptor,
-			c_space_args as * mut IoctlSpaceArgs)
-
-	}.map_err (
-		|error|
-
-		format! (
-			"Error getting btrfs space information: {}",
-			error)
-
-	) ?;
-
-	// return
-
-	Ok (
-		CSpaceInfoResult {
-			args: * c_space_args,
-			infos: c_space_infos.to_vec (),
-		}
-	)
-
+    Ok(CSpaceInfoResult {
+        args: *c_space_args,
+        infos: c_space_infos.to_vec(),
+    })
 }
-
-// ex: noet ts=4 filetype=rust

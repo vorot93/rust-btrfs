@@ -29,5 +29,3 @@ ioctl! (
 ioctl! (
 	readwrite ioctl_fiemap with 'f' as u64, 11;
 	IoctlFiemap);
-
-// ex: noet ts=4 filetype=rust
