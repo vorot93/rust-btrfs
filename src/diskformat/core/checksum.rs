@@ -35,10 +35,6 @@ impl BtrfsChecksum {
             &self.bytes
         }
     }
-
-    pub fn to_string(&self) -> String {
-        format!("{:02x}", self.bytes_truncated().iter().format(""))
-    }
 }
 
 impl Debug for BtrfsChecksum {
@@ -49,7 +45,11 @@ impl Debug for BtrfsChecksum {
 
 impl Display for BtrfsChecksum {
     fn fmt(&self, formatter: &mut Formatter) -> Result<(), FmtError> {
-        formatter.write_fmt(format_args!("{}", self.to_string()))
+        write!(
+            formatter,
+            "{:02x}",
+            self.bytes_truncated().iter().format("")
+        )
     }
 }
 

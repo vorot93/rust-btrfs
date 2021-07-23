@@ -28,10 +28,7 @@ impl<'a> BtrfsRootRef<'a> {
 
         // create dir item
 
-        let root_ref = BtrfsRootRef {
-            header: header,
-            data_bytes: data_bytes,
-        };
+        let root_ref = BtrfsRootRef { header, data_bytes };
 
         // sanity check
 

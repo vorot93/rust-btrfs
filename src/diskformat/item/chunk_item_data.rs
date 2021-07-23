@@ -26,7 +26,7 @@ impl BtrfsChunkItemData {
         unsafe {
             slice::from_raw_parts(
                 (self as *const BtrfsChunkItemData as *const u8)
-                    .offset(mem::size_of::<BtrfsChunkItemData>() as isize)
+                    .add(mem::size_of::<BtrfsChunkItemData>())
                     as *const BtrfsChunkItemStripeData,
                 self.num_stripes as usize,
             )

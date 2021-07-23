@@ -13,10 +13,7 @@ impl<'a> BtrfsExtentItem<'a> {
     ) -> Result<BtrfsExtentItem<'a>, String> {
         // create extent item
 
-        let extent_item = BtrfsExtentItem {
-            header: header,
-            data_bytes: data_bytes,
-        };
+        let extent_item = BtrfsExtentItem { header, data_bytes };
 
         // sanity check
 

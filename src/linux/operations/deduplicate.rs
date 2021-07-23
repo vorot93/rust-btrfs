@@ -23,11 +23,12 @@ pub fn deduplicate_range(
 ) -> Result<(), String> {
     // allocate c structs
 
-    let mut c_dedupe_range_and_range_infos_buffer: Vec<u8> =
-        Vec::from_iter(iter::repeat(0u8).take(
+    let mut c_dedupe_range_and_range_infos_buffer: Vec<u8> = iter::repeat(0u8)
+        .take(
             mem::size_of::<IoctlFileDedupeRange>()
                 + (dedupe_range.dest_infos.len() * mem::size_of::<IoctlFileDedupeRangeInfo>()),
-        ));
+        )
+        .collect();
 
     let (c_dedupe_range_buffer, c_dedupe_range_infos_buffer) =
         c_dedupe_range_and_range_infos_buffer.split_at_mut(mem::size_of::<IoctlFileDedupeRange>());
@@ -196,7 +197,7 @@ pub fn deduplicate_files<AsPath: AsRef<Path>>(filenames: &[AsPath]) -> Result<()
     let source_filename = source_filename[0].as_ref();
 
     let dest_filenames: Vec<&Path> = dest_filenames
-        .into_iter()
+        .iter()
         .map(|dest_filename| dest_filename.as_ref())
         .collect();
 

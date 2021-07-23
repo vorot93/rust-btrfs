@@ -11,10 +11,7 @@ pub struct BtrfsPhysicalAddress {
 
 impl BtrfsPhysicalAddress {
     pub fn new(device_id: u64, offset: u64) -> BtrfsPhysicalAddress {
-        BtrfsPhysicalAddress {
-            device_id: device_id,
-            offset: offset,
-        }
+        BtrfsPhysicalAddress { device_id, offset }
     }
 
     pub fn device_id(&self) -> u64 {

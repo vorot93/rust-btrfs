@@ -21,8 +21,8 @@ macro_rules! leaf_item_composite_type_iterator {
 			) -> $ iterator <'a> {
 
 				$ iterator {
-					header: header,
-					data: data,
+					header,
+					data,
 				}
 
 			}

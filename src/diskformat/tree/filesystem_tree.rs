@@ -42,9 +42,7 @@ impl<'a> BtrfsFilesystemTree<'a> {
 
 impl<'a> BtrfsTree<'a> for BtrfsFilesystemTree<'a> {
     fn new(tree_items: BTreeMap<BtrfsKey, BtrfsLeafItem<'a>>) -> BtrfsFilesystemTree {
-        BtrfsFilesystemTree {
-            tree_items: tree_items,
-        }
+        BtrfsFilesystemTree { tree_items }
     }
 
     fn tree_items(&'a self) -> &'a BTreeMap<BtrfsKey, BtrfsLeafItem<'a>> {

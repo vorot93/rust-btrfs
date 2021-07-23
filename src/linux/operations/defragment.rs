@@ -32,8 +32,8 @@ pub fn defragment_range(
     flush_to_disk: bool,
 ) -> Result<(), String> {
     let defrag_range_args = IoctlDefragRangeArgs {
-        start: start,
-        len: len,
+        start,
+        len,
         flags: (if compression_type != CompressionType::None {
             DEFRAG_RANGE_COMPRESS
         } else {

@@ -14,9 +14,9 @@ impl<'a> BtrfsInvalidItem<'a> {
         error: String,
     ) -> BtrfsInvalidItem<'a> {
         BtrfsInvalidItem {
-            header: header,
-            data_bytes: data_bytes,
-            error: error,
+            header,
+            data_bytes,
+            error,
         }
     }
 }

@@ -27,10 +27,7 @@ impl<'a> BtrfsRootItem<'a> {
 
         // create root item
 
-        let root_item = BtrfsRootItem {
-            header: header,
-            data_bytes: data_bytes,
-        };
+        let root_item = BtrfsRootItem { header, data_bytes };
 
         // return
 

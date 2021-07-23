@@ -7,7 +7,7 @@ pub struct BtrfsDevItem<'a> {
 
 impl<'a> BtrfsDevItem<'a> {
     pub fn new(data: &'a BtrfsDevItemData) -> BtrfsDevItem<'a> {
-        BtrfsDevItem { data: data }
+        BtrfsDevItem { data }
     }
 
     pub fn device_id(&self) -> u64 {

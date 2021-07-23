@@ -16,8 +16,7 @@ impl<'a> BtrfsDevice<'a> {
         let (superblock_data, superblock_offset) = {
             let mut superblock_datas: Vec<(&BtrfsSuperblockData, usize)> = Vec::new();
 
-            for superblock_offset in vec![0x1_0000, 0x400_0000, 0x40_0000_0000, 0x4_0000_0000_0000]
-            {
+            for superblock_offset in [0x1_0000, 0x400_0000, 0x40_0000_0000, 0x4_0000_0000_0000] {
                 if superblock_offset + mem::size_of::<BtrfsSuperblockData>() >= data.len() {
                     continue;
                 }
@@ -35,13 +34,13 @@ impl<'a> BtrfsDevice<'a> {
             superblock_datas
                 .into_iter()
                 .max_by_key(|&(superblock_data, _offset)| superblock_data.generation)
-                .ok_or("No superblocks found".to_string())?
+                .ok_or_else(|| "No superblocks found".to_string())?
         };
 
         Ok(BtrfsDevice {
-            data: data,
-            superblock_data: superblock_data,
-            superblock_offset: superblock_offset,
+            data,
+            superblock_data,
+            superblock_offset,
         })
     }
 
@@ -78,6 +77,10 @@ impl<'a> BtrfsDevice<'a> {
 
     pub fn len(&self) -> usize {
         self.data.len()
+    }
+
+    pub fn is_empty(&self) -> bool {
+        self.len() == 0
     }
 
     pub fn superblock(&self) -> BtrfsSuperblock {

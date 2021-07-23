@@ -14,7 +14,7 @@ pub fn btrfs_decompress_pages(
             let mut position: usize = 0;
 
             if raw_data.len() < 4 {
-                return Err(format!("LZO paging corruption (0)"));
+                return Err("LZO paging corruption (0)".to_string());
             }
 
             let total_compressed_size =
@@ -104,12 +104,10 @@ pub fn btrfs_decompress(
 
         BTRFS_EXTENT_DATA_LZO_COMPRESSION => minilzo::decompress(raw_data, logical_size as usize)
             .map(|uncompressed_data| Ok(Cow::Owned(uncompressed_data)))
-            .or_else(|error| Err(format!("LZO decompression failed: {:?}", error)))?,
+            .map_err(|error| format!("LZO decompression failed: {:?}", error))?,
 
         BTRFS_EXTENT_DATA_ZLIB_COMPRESSION => {
-            let mut uncompressed_data = Vec::with_capacity(logical_size as usize);
-
-            uncompressed_data.resize(logical_size as usize, 0u8);
+            let mut uncompressed_data = vec![0_u8; logical_size as usize];
 
             let mut decompress = flate2::Decompress::new(false);
 
@@ -134,9 +132,9 @@ pub fn btrfs_decompress(
             Ok(Cow::Owned(uncompressed_data))
         }
 
-        _ => panic!(format!(
+        _ => panic!(
             "Unrecognised inline extent data compression {}",
             compression_type
-        )),
+        ),
     }
 }

@@ -18,7 +18,7 @@ impl<'a> BtrfsSuperblockSystemChunks<'a> {
 
         BtrfsSuperblockSystemChunks {
             address: start_address,
-            end_address: end_address,
+            end_address,
             phantom: PhantomData,
         }
     }
@@ -33,16 +33,13 @@ impl<'a> Iterator for BtrfsSuperblockSystemChunks<'a> {
 
             let chunk_item_key = unsafe { &*(self.address as *const BtrfsKey) };
 
-            self.address = unsafe { self.address.offset(mem::size_of::<BtrfsKey>() as isize) };
+            self.address = unsafe { self.address.add(mem::size_of::<BtrfsKey>()) };
 
             // get data
 
             let chunk_item_data = unsafe { &*(self.address as *const BtrfsChunkItemData) };
 
-            self.address = unsafe {
-                self.address
-                    .offset(mem::size_of::<BtrfsChunkItemData>() as isize)
-            };
+            self.address = unsafe { self.address.add(mem::size_of::<BtrfsChunkItemData>()) };
 
             // skip chunk item stripes
 

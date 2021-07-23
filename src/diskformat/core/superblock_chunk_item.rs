@@ -17,10 +17,7 @@ impl<'a> BtrfsSuperblockChunkItem<'a> {
             ));
         }
 
-        Ok(BtrfsSuperblockChunkItem {
-            key: key,
-            data: data,
-        })
+        Ok(BtrfsSuperblockChunkItem { key, data })
     }
 
     pub fn key(&self) -> &BtrfsKey {

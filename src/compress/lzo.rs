@@ -22,6 +22,7 @@ extern "C" {
         callback_size: libc::c_int,
     ) -> libc::c_int;
 
+    #[allow(dead_code)]
     fn lzo2a_decompress(
         src: *const u8,
         src_len: libc::c_uint,

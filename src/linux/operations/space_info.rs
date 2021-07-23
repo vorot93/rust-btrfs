@@ -59,7 +59,7 @@ fn get_c_space_info(
     let c_space_buffer_size =
         mem::size_of::<IoctlSpaceArgs>() + num_spaces as usize * mem::size_of::<IoctlSpaceInfo>();
 
-    let mut c_space_buffer: Vec<u8> = Vec::from_iter(iter::repeat(0u8).take(c_space_buffer_size));
+    let mut c_space_buffer: Vec<u8> = iter::repeat(0u8).take(c_space_buffer_size).collect();
 
     let (c_space_args_buffer, c_space_infos_buffer) =
         c_space_buffer.split_at_mut(mem::size_of::<IoctlSpaceArgs>());

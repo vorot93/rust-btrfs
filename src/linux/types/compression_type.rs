@@ -7,11 +7,11 @@ pub enum CompressionType {
     Lzo,
 }
 
-impl Into<u32> for CompressionType {
-    fn into(self) -> u32 {
+impl From<CompressionType> for u32 {
+    fn from(c: CompressionType) -> Self {
         use crate::CompressionType::*;
 
-        match self {
+        match c {
             None => COMPRESS_NONE,
             Zlib => COMPRESS_ZLIB,
             Lzo => COMPRESS_LZO,

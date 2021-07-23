@@ -39,17 +39,15 @@ impl<'a> BtrfsNode<'a> {
 
     pub fn physical_address(&self) -> BtrfsPhysicalAddress {
         match self {
-            &BtrfsNode::Internal(ref node) => node.physical_address(),
-
-            &BtrfsNode::Leaf(ref node) => node.physical_address(),
+            BtrfsNode::Internal(node) => node.physical_address(),
+            BtrfsNode::Leaf(node) => node.physical_address(),
         }
     }
 
     pub fn header(&self) -> &BtrfsNodeHeader {
         match self {
-            &BtrfsNode::Internal(ref node) => node.header(),
-
-            &BtrfsNode::Leaf(ref node) => node.header(),
+            BtrfsNode::Internal(node) => node.header(),
+            BtrfsNode::Leaf(node) => node.header(),
         }
     }
 
@@ -65,11 +63,10 @@ impl<'a> BtrfsNode<'a> {
 impl<'a> Debug for BtrfsNode<'a> {
     fn fmt(&self, formatter: &mut Formatter) -> Result<(), FmtError> {
         match self {
-            &BtrfsNode::Internal(internal_node) => {
+            BtrfsNode::Internal(internal_node) => {
                 formatter.write_fmt(format_args!("{:?}", internal_node))
             }
-
-            &BtrfsNode::Leaf(leaf_node) => formatter.write_fmt(format_args!("{:?}", leaf_node)),
+            BtrfsNode::Leaf(leaf_node) => formatter.write_fmt(format_args!("{:?}", leaf_node)),
         }
     }
 }

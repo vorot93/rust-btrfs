@@ -19,14 +19,6 @@ impl BtrfsTreeId {
     pub fn is_root(&self) -> bool {
         self.object_id() == BTRFS_ROOT_TREE_OBJECT_ID
     }
-
-    pub fn to_string(&self) -> String {
-        if let Some(tree_name) = BTRFS_TREE_NAMES.get(&self.object_id()) {
-            format!("{} = {}", tree_name, self.object_id())
-        } else {
-            format!("{}", self.object_id())
-        }
-    }
 }
 
 impl From<u64> for BtrfsTreeId {

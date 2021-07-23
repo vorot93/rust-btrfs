@@ -28,10 +28,7 @@ impl<'a> BtrfsDirIndex<'a> {
 
         // create dir item
 
-        let dir_item = BtrfsDirIndex {
-            header: header,
-            data_bytes: data_bytes,
-        };
+        let dir_item = BtrfsDirIndex { header, data_bytes };
 
         // sanity check
 

@@ -9,9 +9,7 @@ macro_rules! leaf_item_composite_type_entries {
 
         impl<'a> $entries<'a> {
             pub fn new(container: &'a $container<'a>) -> $entries<'a> {
-                $entries {
-                    container: container,
-                }
+                $entries { container }
             }
         }
 

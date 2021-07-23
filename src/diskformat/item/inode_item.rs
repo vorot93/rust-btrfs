@@ -27,10 +27,7 @@ impl<'a> BtrfsInodeItem<'a> {
 
         // create inode item
 
-        Ok(BtrfsInodeItem {
-            header: header,
-            data_bytes: data_bytes,
-        })
+        Ok(BtrfsInodeItem { header, data_bytes })
     }
 
     pub fn data(&self) -> &BtrfsInodeItemData {

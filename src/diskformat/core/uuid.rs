@@ -17,17 +17,6 @@ impl BtrfsUuid {
     pub fn bytes(&self) -> &[u8] {
         &self.bytes
     }
-
-    pub fn to_string(&self) -> String {
-        format!(
-            "{:02x}-{:02x}-{:02x}-{:02x}-{:02x}",
-            self.bytes[0x00..0x04].iter().format(""),
-            self.bytes[0x04..0x06].iter().format(""),
-            self.bytes[0x06..0x08].iter().format(""),
-            self.bytes[0x08..0x0a].iter().format(""),
-            self.bytes[0x0a..0x10].iter().format("")
-        )
-    }
 }
 
 impl Debug for BtrfsUuid {

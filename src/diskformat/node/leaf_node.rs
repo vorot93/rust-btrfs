@@ -14,8 +14,8 @@ pub struct BtrfsLeafNode<'a> {
 impl<'a> BtrfsLeafNode<'a> {
     pub fn new(physical_address: BtrfsPhysicalAddress, bytes: &'a [u8]) -> BtrfsLeafNode<'a> {
         BtrfsLeafNode {
-            physical_address: physical_address,
-            bytes: bytes,
+            physical_address,
+            bytes,
         }
     }
 

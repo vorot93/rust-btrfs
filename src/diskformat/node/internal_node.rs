@@ -18,8 +18,8 @@ impl<'a> BtrfsInternalNode<'a> {
         bytes: &'a [u8],
     ) -> Result<BtrfsInternalNode<'a>, String> {
         Ok(BtrfsInternalNode {
-            physical_address: physical_address,
-            bytes: bytes,
+            physical_address,
+            bytes,
         })
     }
 

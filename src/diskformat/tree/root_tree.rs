@@ -30,11 +30,7 @@ impl<'a> BtrfsRootTree<'a> {
                     0,
                 ))
             })
-            .map(|root_item| {
-                leaf_item_destructure!(root_item, RootItem,)
-                    .unwrap()
-                    .clone()
-            })
+            .map(|root_item| *leaf_item_destructure!(root_item, RootItem,).unwrap())
     }
 
     pub fn fs_tree_root_item(&'a self) -> Option<BtrfsRootItem<'a>> {
@@ -52,11 +48,7 @@ impl<'a> BtrfsRootTree<'a> {
                         || item.object_id() as i64 <= -128
                         || item.object_id() == 5)
             })
-            .map(|root_item| {
-                leaf_item_destructure!(root_item, RootItem,)
-                    .unwrap()
-                    .clone()
-            })
+            .map(|root_item| *leaf_item_destructure!(root_item, RootItem,).unwrap())
             .collect()
     }
 
@@ -64,7 +56,7 @@ impl<'a> BtrfsRootTree<'a> {
         self.tree_items
             .values()
             .filter(|item| item.item_type() == BTRFS_ROOT_REF_ITEM_TYPE)
-            .map(|root_ref| leaf_item_destructure!(root_ref, RootRef,).unwrap().clone())
+            .map(|root_ref| *leaf_item_destructure!(root_ref, RootRef,).unwrap())
             .collect()
     }
 
@@ -76,20 +68,14 @@ impl<'a> BtrfsRootTree<'a> {
         self.tree_items
             .values()
             .filter(|item| item.item_type() == BTRFS_ROOT_BACKREF_ITEM_TYPE)
-            .map(|root_backref| {
-                leaf_item_destructure!(root_backref, RootBackref,)
-                    .unwrap()
-                    .clone()
-            })
+            .map(|root_backref| *leaf_item_destructure!(root_backref, RootBackref,).unwrap())
             .collect()
     }
 }
 
 impl<'a> BtrfsTree<'a> for BtrfsRootTree<'a> {
     fn new(tree_items: BTreeMap<BtrfsKey, BtrfsLeafItem<'a>>) -> BtrfsRootTree {
-        BtrfsRootTree {
-            tree_items: tree_items,
-        }
+        BtrfsRootTree { tree_items }
     }
 
     fn tree_items(&'a self) -> &'a BTreeMap<BtrfsKey, BtrfsLeafItem<'a>> {

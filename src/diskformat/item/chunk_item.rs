@@ -26,10 +26,7 @@ impl<'a> BtrfsChunkItem<'a> {
 
         // create chunk item
 
-        Ok(BtrfsChunkItem {
-            header: header,
-            data_bytes: data_bytes,
-        })
+        Ok(BtrfsChunkItem { header, data_bytes })
     }
 
     pub fn data(&self) -> &BtrfsChunkItemData {

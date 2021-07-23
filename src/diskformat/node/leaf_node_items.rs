@@ -11,9 +11,9 @@ pub struct BtrfsLeafNodeItems<'a> {
 impl<'a> BtrfsLeafNodeItems<'a> {
     pub fn new(bytes: &'a [u8], num_items: u32) -> BtrfsLeafNodeItems<'a> {
         BtrfsLeafNodeItems {
-            bytes: bytes,
+            bytes,
             index: 0,
-            num_items: num_items,
+            num_items,
         }
     }
 }

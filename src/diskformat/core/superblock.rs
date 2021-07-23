@@ -13,7 +13,7 @@ pub struct BtrfsSuperblock<'a> {
 
 impl<'a> BtrfsSuperblock<'a> {
     pub fn new(data: &'a BtrfsSuperblockData) -> BtrfsSuperblock<'a> {
-        BtrfsSuperblock { data: data }
+        BtrfsSuperblock { data }
     }
 
     pub fn for_bytes(bytes: &'a [u8]) -> BtrfsSuperblock<'a> {

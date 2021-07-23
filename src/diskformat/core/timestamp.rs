@@ -15,8 +15,8 @@ pub struct BtrfsTimestamp {
 impl BtrfsTimestamp {
     pub fn new(seconds: i64, nano_seconds: u32) -> BtrfsTimestamp {
         BtrfsTimestamp {
-            seconds: seconds,
-            nano_seconds: nano_seconds,
+            seconds,
+            nano_seconds,
         }
     }
 
@@ -30,12 +30,6 @@ impl BtrfsTimestamp {
 
     pub fn to_naive_date_time(&self) -> NaiveDateTime {
         NaiveDateTime::from_timestamp(self.seconds, self.nano_seconds)
-    }
-
-    pub fn to_string(&self) -> String {
-        self.to_naive_date_time()
-            .format("%Y-%m-%dT%H:%M:%S%.fZ")
-            .to_string()
     }
 }
 

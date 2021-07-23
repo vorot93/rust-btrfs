@@ -36,7 +36,7 @@ impl<'a> BtrfsFilesystem<'a> {
                 }
             }
 
-            Err(format!("Unable to open filesystem or any backups"))
+            Err("Unable to open filesystem or any backups".to_string())
         })
     }
 
@@ -98,10 +98,10 @@ impl<'a> BtrfsFilesystem<'a> {
         // return
 
         Ok(BtrfsFilesystem {
-            devices: devices,
-            chunk_tree: chunk_tree,
-            filesystem_trees: filesystem_trees,
-            root_tree: root_tree,
+            devices,
+            chunk_tree,
+            filesystem_trees,
+            root_tree,
         })
     }
 
@@ -168,10 +168,10 @@ impl<'a> BtrfsFilesystem<'a> {
         // return
 
         Ok(BtrfsFilesystem {
-            devices: devices,
-            chunk_tree: chunk_tree,
-            filesystem_trees: filesystem_trees,
-            root_tree: root_tree,
+            devices,
+            chunk_tree,
+            filesystem_trees,
+            root_tree,
         })
     }
 

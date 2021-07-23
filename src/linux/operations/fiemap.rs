@@ -81,7 +81,7 @@ fn get_c_file_extent_map(
     let c_fiemap_buffer_size =
         mem::size_of::<IoctlFiemap>() + extent_count as usize * mem::size_of::<IoctlFiemapExtent>();
 
-    let mut c_fiemap_buffer: Vec<u8> = Vec::from_iter(iter::repeat(0u8).take(c_fiemap_buffer_size));
+    let mut c_fiemap_buffer: Vec<u8> = iter::repeat(0u8).take(c_fiemap_buffer_size).collect();
 
     let (c_fiemap_info_buffer, c_fiemap_extents_buffer) =
         c_fiemap_buffer.split_at_mut(mem::size_of::<IoctlFiemap>());

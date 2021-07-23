@@ -19,35 +19,45 @@ pub enum BtrfsLeafItem<'a> {
 impl<'a> BtrfsLeafItem<'a> {
     pub fn from_bytes(header: &'a BtrfsLeafItemHeader, data_bytes: &'a [u8]) -> BtrfsLeafItem<'a> {
         match header.key().item_type() {
-            BTRFS_CHUNK_ITEM_TYPE => BtrfsChunkItem::from_bytes(header, data_bytes)
-                .map(|chunk_item| BtrfsLeafItem::ChunkItem(chunk_item)),
+            BTRFS_CHUNK_ITEM_TYPE => {
+                BtrfsChunkItem::from_bytes(header, data_bytes).map(BtrfsLeafItem::ChunkItem)
+            }
 
-            BTRFS_DIR_INDEX_TYPE => BtrfsDirIndex::from_bytes(header, data_bytes)
-                .map(|dir_index| BtrfsLeafItem::DirIndex(dir_index)),
+            BTRFS_DIR_INDEX_TYPE => {
+                BtrfsDirIndex::from_bytes(header, data_bytes).map(BtrfsLeafItem::DirIndex)
+            }
 
-            BTRFS_DIR_ITEM_TYPE => BtrfsDirItem::from_bytes(header, data_bytes)
-                .map(|dir_item| BtrfsLeafItem::DirItem(dir_item)),
+            BTRFS_DIR_ITEM_TYPE => {
+                BtrfsDirItem::from_bytes(header, data_bytes).map(BtrfsLeafItem::DirItem)
+            }
 
-            BTRFS_EXTENT_DATA_TYPE => BtrfsExtentData::from_bytes(header, data_bytes)
-                .map(|extent_data| BtrfsLeafItem::ExtentData(extent_data)),
+            BTRFS_EXTENT_DATA_TYPE => {
+                BtrfsExtentData::from_bytes(header, data_bytes).map(BtrfsLeafItem::ExtentData)
+            }
 
-            BTRFS_EXTENT_ITEM_TYPE => BtrfsExtentItem::from_bytes(header, data_bytes)
-                .map(|extent_item| BtrfsLeafItem::ExtentItem(extent_item)),
+            BTRFS_EXTENT_ITEM_TYPE => {
+                BtrfsExtentItem::from_bytes(header, data_bytes).map(BtrfsLeafItem::ExtentItem)
+            }
 
-            BTRFS_INODE_ITEM_TYPE => BtrfsInodeItem::from_bytes(header, data_bytes)
-                .map(|inode_item| BtrfsLeafItem::InodeItem(inode_item)),
+            BTRFS_INODE_ITEM_TYPE => {
+                BtrfsInodeItem::from_bytes(header, data_bytes).map(BtrfsLeafItem::InodeItem)
+            }
 
-            BTRFS_INODE_REF_TYPE => BtrfsInodeRef::from_bytes(header, data_bytes)
-                .map(|inode_ref| BtrfsLeafItem::InodeRef(inode_ref)),
+            BTRFS_INODE_REF_TYPE => {
+                BtrfsInodeRef::from_bytes(header, data_bytes).map(BtrfsLeafItem::InodeRef)
+            }
 
-            BTRFS_ROOT_BACKREF_ITEM_TYPE => BtrfsRootBackref::from_bytes(header, data_bytes)
-                .map(|root_backref| BtrfsLeafItem::RootBackref(root_backref)),
+            BTRFS_ROOT_BACKREF_ITEM_TYPE => {
+                BtrfsRootBackref::from_bytes(header, data_bytes).map(BtrfsLeafItem::RootBackref)
+            }
 
-            BTRFS_ROOT_ITEM_TYPE => BtrfsRootItem::from_bytes(header, data_bytes)
-                .map(|root_item| BtrfsLeafItem::RootItem(root_item)),
+            BTRFS_ROOT_ITEM_TYPE => {
+                BtrfsRootItem::from_bytes(header, data_bytes).map(BtrfsLeafItem::RootItem)
+            }
 
-            BTRFS_ROOT_REF_ITEM_TYPE => BtrfsRootRef::from_bytes(header, data_bytes)
-                .map(|root_ref| BtrfsLeafItem::RootRef(root_ref)),
+            BTRFS_ROOT_REF_ITEM_TYPE => {
+                BtrfsRootRef::from_bytes(header, data_bytes).map(BtrfsLeafItem::RootRef)
+            }
 
             _ => Ok(BtrfsLeafItem::Unknown(BtrfsUnknownItem::new(
                 header, data_bytes,
@@ -58,31 +68,21 @@ impl<'a> BtrfsLeafItem<'a> {
         })
     }
 
-    pub fn contents(&'a self) -> Box<&'a dyn BtrfsLeafItemContents<'a>> {
+    pub fn contents(&self) -> &dyn BtrfsLeafItemContents<'_> {
         match self {
-            &BtrfsLeafItem::ChunkItem(ref chunk_item) => Box::new(chunk_item),
+            BtrfsLeafItem::ChunkItem(chunk_item) => chunk_item,
+            BtrfsLeafItem::DirIndex(dir_index) => dir_index,
+            BtrfsLeafItem::DirItem(dir_item) => dir_item,
+            BtrfsLeafItem::ExtentData(extent_data) => extent_data,
+            BtrfsLeafItem::ExtentItem(extent_item) => extent_item,
 
-            &BtrfsLeafItem::DirIndex(ref dir_index) => Box::new(dir_index),
-
-            &BtrfsLeafItem::DirItem(ref dir_item) => Box::new(dir_item),
-
-            &BtrfsLeafItem::ExtentData(ref extent_data) => Box::new(extent_data),
-
-            &BtrfsLeafItem::ExtentItem(ref extent_item) => Box::new(extent_item),
-
-            &BtrfsLeafItem::InodeItem(ref inode_item) => Box::new(inode_item),
-
-            &BtrfsLeafItem::InodeRef(ref inode_ref) => Box::new(inode_ref),
-
-            &BtrfsLeafItem::Invalid(ref invalid_item) => Box::new(invalid_item),
-
-            &BtrfsLeafItem::RootBackref(ref root_backref) => Box::new(root_backref),
-
-            &BtrfsLeafItem::RootItem(ref root_item) => Box::new(root_item),
-
-            &BtrfsLeafItem::RootRef(ref root_ref) => Box::new(root_ref),
-
-            &BtrfsLeafItem::Unknown(ref unknown_item) => Box::new(unknown_item),
+            BtrfsLeafItem::InodeItem(inode_item) => inode_item,
+            BtrfsLeafItem::InodeRef(inode_ref) => inode_ref,
+            BtrfsLeafItem::Invalid(invalid_item) => invalid_item,
+            BtrfsLeafItem::RootBackref(root_backref) => root_backref,
+            BtrfsLeafItem::RootItem(root_item) => root_item,
+            BtrfsLeafItem::RootRef(root_ref) => root_ref,
+            BtrfsLeafItem::Unknown(unknown_item) => unknown_item,
         }
     }
 
@@ -108,8 +108,7 @@ impl<'a> BtrfsLeafItem<'a> {
 
     pub fn as_root_item(&'a self) -> Option<&'a BtrfsRootItem<'a>> {
         match self {
-            &BtrfsLeafItem::RootItem(ref item) => Some(item),
-
+            BtrfsLeafItem::RootItem(item) => Some(item),
             _ => None,
         }
     }

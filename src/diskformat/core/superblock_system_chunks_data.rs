@@ -22,6 +22,6 @@ impl Hash for BtrfsSuperblockSystemChunksData {
 
 impl PartialEq for BtrfsSuperblockSystemChunksData {
     fn eq(&self, other: &BtrfsSuperblockSystemChunksData) -> bool {
-        &self.data[..] == &other.data[..]
+        self.data[..] == other.data[..]
     }
 }

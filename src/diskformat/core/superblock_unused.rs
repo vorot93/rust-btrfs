@@ -22,6 +22,6 @@ impl Hash for BtrfsSuperblockUnused {
 
 impl PartialEq for BtrfsSuperblockUnused {
     fn eq(&self, other: &BtrfsSuperblockUnused) -> bool {
-        &self.data[..] == &other.data[..]
+        self.data[..] == other.data[..]
     }
 }

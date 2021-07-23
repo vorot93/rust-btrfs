@@ -28,10 +28,7 @@ impl<'a> BtrfsRootBackref<'a> {
 
         // create root backref
 
-        let root_ref = BtrfsRootBackref {
-            header: header,
-            data_bytes: data_bytes,
-        };
+        let root_ref = BtrfsRootBackref { header, data_bytes };
 
         // sanity check
 

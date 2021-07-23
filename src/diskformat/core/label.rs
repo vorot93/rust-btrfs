@@ -23,6 +23,10 @@ impl BtrfsLabel {
             .unwrap_or(self.data.len())
     }
 
+    pub fn is_empty(&self) -> bool {
+        self.len() == 0
+    }
+
     pub fn data(&self) -> &[u8] {
         &self.data[0..self.len()]
     }
@@ -60,6 +64,6 @@ impl Hash for BtrfsLabel {
 
 impl PartialEq for BtrfsLabel {
     fn eq(&self, other: &BtrfsLabel) -> bool {
-        &self.data[..] == &other.data[..]
+        self.data[..] == other.data[..]
     }
 }

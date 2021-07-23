@@ -8,10 +8,7 @@ pub struct BtrfsUnknownItem<'a> {
 
 impl<'a> BtrfsUnknownItem<'a> {
     pub fn new(header: &'a BtrfsLeafItemHeader, data_bytes: &'a [u8]) -> BtrfsUnknownItem<'a> {
-        BtrfsUnknownItem {
-            header: header,
-            data_bytes: data_bytes,
-        }
+        BtrfsUnknownItem { header, data_bytes }
     }
 }
 

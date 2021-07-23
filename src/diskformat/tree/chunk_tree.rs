@@ -11,22 +11,17 @@ pub struct BtrfsChunkTree<'a> {
 
 impl<'a> BtrfsChunkTree<'a> {
     pub fn new(devices: &'a BtrfsDeviceSet) -> Result<BtrfsChunkTree<'a>, String> {
-        let extent_tree_items = Self::read_system_extent_tree(devices)?;
-
-        let mut chunk_items_by_offset = BtrfsChunkItemsByOffset::new();
-
-        for extent_tree_item in extent_tree_items.values() {
-            match extent_tree_item {
-                &BtrfsLeafItem::ChunkItem(chunk_item) => {
-                    chunk_items_by_offset.insert(chunk_item.key().offset(), chunk_item);
-                }
-
-                _ => (),
-            }
-        }
-
         Ok(BtrfsChunkTree {
-            chunk_items_by_offset: chunk_items_by_offset,
+            chunk_items_by_offset: Self::read_system_extent_tree(devices)?
+                .values()
+                .filter_map(|extent_tree_item| {
+                    if let BtrfsLeafItem::ChunkItem(chunk_item) = extent_tree_item {
+                        Some((chunk_item.key().offset(), *chunk_item))
+                    } else {
+                        None
+                    }
+                })
+                .collect(),
         })
     }
 

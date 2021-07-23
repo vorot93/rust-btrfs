@@ -19,10 +19,7 @@ impl<'a> BtrfsExtentData<'a> {
     ) -> Result<BtrfsExtentData<'a>, String> {
         // create extent data
 
-        let extent_data = BtrfsExtentData {
-            header: header,
-            data_bytes: data_bytes,
-        };
+        let extent_data = BtrfsExtentData { header, data_bytes };
 
         // sanity check
 
@@ -34,13 +31,11 @@ impl<'a> BtrfsExtentData<'a> {
                     mem::size_of::<BtrfsExtentDataData>() - mem::size_of::<u64>() * 4
                 ));
             }
-        } else {
-            if data_bytes.len() != mem::size_of::<BtrfsExtentDataData>() {
-                return Err(format!(
-                    "Must be exactly 0x{:x} bytes",
-                    mem::size_of::<BtrfsExtentDataData>()
-                ));
-            }
+        } else if data_bytes.len() != mem::size_of::<BtrfsExtentDataData>() {
+            return Err(format!(
+                "Must be exactly 0x{:x} bytes",
+                mem::size_of::<BtrfsExtentDataData>()
+            ));
         }
 
         // return

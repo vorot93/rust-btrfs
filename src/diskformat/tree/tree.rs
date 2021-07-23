@@ -123,8 +123,7 @@ pub trait BtrfsTree<'a>: Sized {
             .values()
             .filter(|item| item.item_type() == BTRFS_DIR_ITEM_TYPE)
             .map(|item| match item {
-                &BtrfsLeafItem::DirItem(ref item) => item,
-
+                BtrfsLeafItem::DirItem(item) => item,
                 _ => panic!(),
             })
             .collect()

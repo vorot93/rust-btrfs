@@ -28,10 +28,7 @@ impl<'a> BtrfsInodeRefEntry<'a> {
 
         // create inode ref
 
-        let inode_ref = BtrfsInodeRefEntry {
-            header: header,
-            data_bytes: data_bytes,
-        };
+        let inode_ref = BtrfsInodeRefEntry { header, data_bytes };
 
         // sanity check
 

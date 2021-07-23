@@ -10,8 +10,8 @@ pub struct BtrfsDeviceSet<'a> {
 
 impl<'a> BtrfsDeviceSet<'a> {
     pub fn new(datas: &[&'a [u8]]) -> Result<BtrfsDeviceSet<'a>, String> {
-        if datas.len() == 0 {
-            return Err(format!("No device data supplied"));
+        if datas.is_empty() {
+            return Err("No device data supplied".to_string());
         }
 
         let mut devices = HashMap::new();
@@ -42,8 +42,8 @@ impl<'a> BtrfsDeviceSet<'a> {
             .unwrap();
 
         Ok(BtrfsDeviceSet {
-            devices: devices,
-            superblock: superblock,
+            devices,
+            superblock,
         })
     }
 

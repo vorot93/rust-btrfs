@@ -6,6 +6,12 @@
 //! (https://gitlab.wellbehavedsoftware.com/well-behaved-software/rust-btrfs).
 
 #![allow(unused_parens)]
+#![allow(clippy::identity_op)]
+#![allow(clippy::module_inception)]
+#![allow(clippy::missing_safety_doc)]
+#![allow(clippy::needless_range_loop)]
+#![allow(clippy::wrong_self_convention)]
+#![allow(unaligned_references)]
 #![deny(non_camel_case_types)]
 #![deny(non_snake_case)]
 #![deny(non_upper_case_globals)]
