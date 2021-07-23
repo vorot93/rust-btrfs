@@ -19,6 +19,3 @@ minilzo = "0.2"
 nix = "0.8"
 output = "0.6"
 uuid = "0.5"
-
-[replace]
-"output:0.6.2" = { path = "../rust-output" }

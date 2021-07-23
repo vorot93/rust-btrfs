@@ -18,7 +18,7 @@ impl<'a> BtrfsFilesystem<'a> {
             for backup_index in 0..4 {
                 output_message!(output, "Trying backup {}", backup_index);
 
-                output_debug!(
+                output_message!(
                     output,
                     "{:?}",
                     devices.superblock().root_backups()[backup_index]
