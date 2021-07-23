@@ -82,7 +82,7 @@ pub fn initialise() -> Result<(), String> {
 // decompression
 
 pub fn decompress(input: &[u8], output_size: usize) -> Result<Vec<u8>, String> {
-    initialise().unwrap_or_else(|error| panic!(error));
+    initialise().unwrap();
 
     let mut output = Vec::new();
 

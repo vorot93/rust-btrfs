@@ -58,7 +58,7 @@ impl<'a> BtrfsLeafItem<'a> {
         })
     }
 
-    pub fn contents(&'a self) -> Box<&'a BtrfsLeafItemContents<'a>> {
+    pub fn contents(&'a self) -> Box<&'a dyn BtrfsLeafItemContents<'a>> {
         match self {
             &BtrfsLeafItem::ChunkItem(ref chunk_item) => Box::new(chunk_item),
 

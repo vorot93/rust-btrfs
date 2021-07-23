@@ -117,7 +117,8 @@ pub fn btrfs_decompress(
 
             match (decompress
                 .decompress(raw_data, &mut uncompressed_data, flate2::Flush::Finish)
-                .unwrap_or_else(|error| panic!("ZLIB decompression failed: {:?}", error)))
+                .map_err(|error| format!("ZLIB decompression failed: {:?}", error))
+                .unwrap())
             {
                 flate2::Status::Ok => (),
 
